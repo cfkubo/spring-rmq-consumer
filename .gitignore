@@ -63,3 +63,5 @@ cookies*.txt
 
 *.bundle
 *.lock
+
+.gitattributes
