@@ -1,4 +1,4 @@
-# RabbitMQ Consumer Dashboard
+# RabbitMQ Consumer Application
 
 This project is a Spring Boot application that consumes messages asynchronously from multiple RabbitMQ queues and a fanout exchange. It provides a Vaadin-based dashboard to monitor queue statistics and consumption metrics.
 
