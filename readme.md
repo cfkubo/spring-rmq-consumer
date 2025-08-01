@@ -82,13 +82,18 @@ mvn spring-boot:run
 mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8085
 ```
 
+#### Application logs screenshot
 
 ![logs](static/logs.png)
+
+
 
 
 ### Monitoring via Prometheus & Grafana
 
 ![logs](static/1.png)
+![logs](static/2.png)
+![logs](static/3.png)
 
 
 
