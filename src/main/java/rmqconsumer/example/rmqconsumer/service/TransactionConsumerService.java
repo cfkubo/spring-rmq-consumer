@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 // No longer need Acknowledgment import for AUTO ack mode unless you want to use it for specific scenarios
 // import org.springframework.amqp.support.Acknowledgment;
 import org.springframework.amqp.core.Message; // Keep Message import if you still want to access headers
+
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -27,21 +29,31 @@ public class TransactionConsumerService {
      * @param payload The deserialized message payload (e.g., String or your custom DTO).
      * @param message The incoming AMQP message (optional, but useful for headers).
      */
-    @RabbitListener(queues = "classic.transactions", ackMode = "AUTO") // Changed ackMode
-    public void consumeClassic(String payload, Message message) { // Removed Acknowledgment ack parameter
+    @RabbitListener(queues = "classic.transactions", ackMode = "AUTO")
+    public void consumeClassic(String payload, Message message) {
         classicConsumed.incrementAndGet();
         logger.info("[{}] Classic Queue: Received message -> {}", Thread.currentThread().getName(), payload);
 
-        // Process the payload here.
-        // If this method completes without throwing an exception, it's ACKED automatically.
+        // --- ADDING THE DELAY HERE ---
+        try {
+            // This is how you introduce a delay.
+            // For example, a 5-second delay:
+            long delayMillis = 10000;
+            logger.info("Simulating a {}ms delay in processing...", delayMillis);
+            TimeUnit.MILLISECONDS.sleep(delayMillis);
+        } catch (InterruptedException e) {
+            // Handle the interruption if the thread is asked to stop while sleeping
+            Thread.currentThread().interrupt();
+            logger.error("Consumer thread was interrupted while sleeping.", e);
+            // You might want to re-throw or handle the exception based on your application's logic.
+        }
 
-        // Example: Simulate an error for testing NACK behavior
-        // if (payload.contains("error")) {
-        //     logger.error("Simulating an error for payload: {}", payload);
-        //     throw new RuntimeException("Simulated processing error!");
-        // }
+        // Process the payload after the delay.
+        // If this method completes without throwing an exception, it's ACKED automatically.
+        // ... (your existing processing code)
 
         logger.info("[{}] Classic Queue: Successfully processed message -> {}", Thread.currentThread().getName(), payload);
+
     }
 
     /**
