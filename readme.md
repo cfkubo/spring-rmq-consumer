@@ -67,16 +67,24 @@ server.port=8082
 1. Ensure RabbitMQ is running and queues/exchanges are configured.
 2. Build and start the Spring Boot application:
 
-   ```sh
-   ./mvnw spring-boot:run
-   ```
+### Build and Run the Application
+
+```
+mvn clean package
+```
+
+```
+mvn spring-boot:run
+```
+### Running multiple instances of application
+
+```
+mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8085
+```
 
 3. Access the dashboard at [http://localhost:8082/](http://localhost:8082/) (or your configured port).
 
-## Monitoring
 
-- The dashboard displays live stats for each queue.
-- Message consumption is logged in the application logs.
 
 ## Customization
 
