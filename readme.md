@@ -8,17 +8,20 @@ This project is a Spring Boot application that consumes messages asynchronously 
   - `classic.transactions`
   - `quorum.transactions`
   - `stream.transactions`
-  - Fanout exchange: `transactions`
+
 - Manual acknowledgment for reliable message processing (configurable).
-- Dashboard showing:
-  - Queues being consumed
-  - Number of messages in each queue
-  - Number of messages consumed since startup
+
 - Configurable concurrency and prefetch for high throughput.
+
+The application uses manual acknowledgment, which ensures that a message is only removed from the queue after it has been successfully processed by the consumer. This provides a higher level of reliability than automatic acknowledgment. The concurrency and prefetch settings are highly configurable, allowing you to tune the application for high throughput scenarios.
+
+
 
 ## RabbitMQ Queue Policies
 
 Example policies for queue limits and overflow handling:
+
+These policies define message limits and overflow behavior for your queues. This is crucial for preventing queues from growing indefinitely and consuming excessive memory.
 
 ```sh
 rabbitmqctl set_policy q-pol "quorum.transactions" \
@@ -34,7 +37,9 @@ rabbitmqctl set_policy c-pol "classic.transactions" \
   --apply-to queues
 ```
 
-Example policies for  consuemr timeouts
+#### Consumer Timeout
+
+This policy ensures that consumers don't hold messages for too long without acknowledging them. If a consumer fails, this setting can help release the message back to the queue for another consumer to process.
 
 ```
 rabbitmqctl set_policy all ".*" '{"consumer-timeout":5000}'
@@ -44,6 +49,8 @@ rabbitmqctl set_policy all ".*" '{"consumer-timeout":5000}'
 ## Consumer Timeout Policy Example
 
 Override consumer timeout for a group of queues:
+
+
 
 ```sh
 rabbitmqctl set_policy queue_consumer_timeout "with_delivery_timeout.*" \
@@ -77,6 +84,8 @@ mvn clean package
 mvn spring-boot:run
 ```
 ### Running multiple instances of application
+
+To simulate a clustered environment, you can run multiple instances of the application on different ports. This is useful for testing load balancing and consumer behavior with multiple workers.
 
 ```
 mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8085
