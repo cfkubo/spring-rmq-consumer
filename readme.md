@@ -34,6 +34,13 @@ rabbitmqctl set_policy c-pol "classic.transactions" \
   --apply-to queues
 ```
 
+Example policies for  consuemr timeouts
+
+```
+rabbitmqctl set_policy all ".*" '{"consumer-timeout":5000}'
+```
+
+
 ## Consumer Timeout Policy Example
 
 Override consumer timeout for a group of queues:
