@@ -85,7 +85,10 @@ mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8085
 
 ![logs](static/logs.png)
 
-3. Access the dashboard at [http://localhost:8082/](http://localhost:8082/) (or your configured port).
+
+### Monitoring via Prometheus & Grafana
+
+![logs](static/1.png)
 
 
 
